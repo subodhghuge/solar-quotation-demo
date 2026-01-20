@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solar Quotation Form</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input[readonly] { background-color: #f0f0f0; }
+    .form-group { margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <h2>10 KW Solar PV Quotation</h2>
+  <form id="quotationForm">
+    <div class="form-group">
+      <label>System Cost (₹):</label>
+      <input type="number" id="systemCost" required>
+    </div>
+    <div class="form-group">
+      <label>GST %:</label>
+      <input type="number" id="gstPercent" value="8.9" required>
+    </div>
+    <div class="form-group">
+      <label>GST Amount (₹):</label>
+      <input type="number" id="gstAmount" readonly>
+    </div>
+    <div class="form-group">
+      <label>Total Project Cost (₹):</label>
+      <input type="number" id="totalCost" readonly>
+    </div>
+    <h3>Payment Terms</h3>
+    <div class="form-group">
+      <label>60% Advance:</label>
+      <input type="number" id="advance" readonly>
+    </div>
+    <div class="form-group">
+      <label>30% Proforma:</label>
+      <input type="number" id="proforma" readonly>
+    </div>
+    <div class="form-group">
+      <label>5% Commissioning:</label>
+      <input type="number" id="commissioning" readonly>
+    </div>
+    <div class="form-group">
+      <label>5% Meter Installation:</label>
+      <input type="number" id="meter" readonly>
+    </div>
+    <button type="submit">Generate Quotation PDF</button>
+  </form>
+
+  <p id="downloadLink"></p>
+
+  <script>
+    const form = document.getElementById('quotationForm');
+    const systemCost = document.getElementById('systemCost');
+    const gstPercent = document.getElementById('gstPercent');
+    const gstAmount = document.getElementById('gstAmount');
+    const totalCost = document.getElementById('totalCost');
+    const advance = document.getElementById('advance');
+    const proforma = document.getElementById('proforma');
+    const commissioning = document.getElementById('commissioning');
+    const meter = document.getElementById('meter');
+    const downloadLink = document.getElementById('downloadLink');
+
+    function calculate() {
+      const cost = parseFloat(systemCost.value) || 0;
+      const gst = (cost * (parseFloat(gstPercent.value) || 0)) / 100;
+      const total = cost + gst;
+
+      gstAmount.value = gst.toFixed(2);
+      totalCost.value = total.toFixed(2);
+
+      advance.value = (total * 0.60).toFixed(2);
+      proforma.value = (total * 0.30).toFixed(2);
+      commissioning.value = (total * 0.05).toFixed(2);
+      meter.value = (total * 0.05).toFixed(2);
+    }
+
+    systemCost.addEventListener('input', calculate);
+    gstPercent.addEventListener('input', calculate);
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const payload = {
+        systemCost: systemCost.value,
+        gstPercent: gstPercent.value,
+        gstAmount: gstAmount.value,
+        totalCost: totalCost.value,
+        advance: advance.value,
+        proforma: proforma.value,
+        commissioning: commissioning.value,
+        meter: meter.value
+      };
+
+      const res = await fetch('/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      downloadLink.innerHTML = `<a href="${data.link}" target="_blank">Download Quotation PDF</a>`;
+    });
+  </script>
+</body>
+</html>
