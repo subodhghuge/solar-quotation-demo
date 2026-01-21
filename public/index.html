@@ -4,46 +4,54 @@
   <title>Solar Quotation Form</title>
   <style>
     body { font-family: Arial; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
     input[readonly] { background-color: #f0f0f0; }
-    .form-group { margin-bottom: 15px; }
+    h2 { margin-bottom: 20px; }
+    button { margin-top: 20px; padding: 10px 20px; }
   </style>
 </head>
 <body>
   <h2>10 KW Solar PV Quotation</h2>
   <form id="quotationForm">
-    <div class="form-group">
-      <label>System Cost (₹):</label>
-      <input type="number" id="systemCost" required>
-    </div>
-    <div class="form-group">
-      <label>GST %:</label>
-      <input type="number" id="gstPercent" value="8.9" required>
-    </div>
-    <div class="form-group">
-      <label>GST Amount (₹):</label>
-      <input type="number" id="gstAmount" readonly>
-    </div>
-    <div class="form-group">
-      <label>Total Project Cost (₹):</label>
-      <input type="number" id="totalCost" readonly>
-    </div>
-    <h3>Payment Terms</h3>
-    <div class="form-group">
-      <label>60% Advance:</label>
-      <input type="number" id="advance" readonly>
-    </div>
-    <div class="form-group">
-      <label>30% Proforma:</label>
-      <input type="number" id="proforma" readonly>
-    </div>
-    <div class="form-group">
-      <label>5% Commissioning:</label>
-      <input type="number" id="commissioning" readonly>
-    </div>
-    <div class="form-group">
-      <label>5% Meter Installation:</label>
-      <input type="number" id="meter" readonly>
-    </div>
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>System Cost (₹)</td>
+        <td><input type="number" id="systemCost" required></td>
+      </tr>
+      <tr>
+        <td>GST %</td>
+        <td><input type="number" id="gstPercent" value="8.9" required></td>
+      </tr>
+      <tr>
+        <td>GST Amount (₹)</td>
+        <td><input type="number" id="gstAmount" readonly></td>
+      </tr>
+      <tr>
+        <td>Total Project Cost (₹)</td>
+        <td><input type="number" id="totalCost" readonly></td>
+      </tr>
+      <tr>
+        <td>60% Advance</td>
+        <td><input type="number" id="advance" readonly></td>
+      </tr>
+      <tr>
+        <td>30% Proforma</td>
+        <td><input type="number" id="proforma" readonly></td>
+      </tr>
+      <tr>
+        <td>5% Commissioning</td>
+        <td><input type="number" id="commissioning" readonly></td>
+      </tr>
+      <tr>
+        <td>5% Meter Installation</td>
+        <td><input type="number" id="meter" readonly></td>
+      </tr>
+    </table>
     <button type="submit">Generate Quotation PDF</button>
   </form>
 
