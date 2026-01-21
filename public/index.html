@@ -15,42 +15,15 @@
   <h2>10 KW Solar PV Quotation</h2>
   <form id="quotationForm">
     <table>
-      <tr>
-        <th>Field</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>System Cost (₹)</td>
-        <td><input type="number" id="systemCost" required></td>
-      </tr>
-      <tr>
-        <td>GST %</td>
-        <td><input type="number" id="gstPercent" value="8.9" required></td>
-      </tr>
-      <tr>
-        <td>GST Amount (₹)</td>
-        <td><input type="number" id="gstAmount" readonly></td>
-      </tr>
-      <tr>
-        <td>Total Project Cost (₹)</td>
-        <td><input type="number" id="totalCost" readonly></td>
-      </tr>
-      <tr>
-        <td>60% Advance</td>
-        <td><input type="number" id="advance" readonly></td>
-      </tr>
-      <tr>
-        <td>30% Proforma</td>
-        <td><input type="number" id="proforma" readonly></td>
-      </tr>
-      <tr>
-        <td>5% Commissioning</td>
-        <td><input type="number" id="commissioning" readonly></td>
-      </tr>
-      <tr>
-        <td>5% Meter Installation</td>
-        <td><input type="number" id="meter" readonly></td>
-      </tr>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>System Cost (₹)</td><td><input type="number" id="systemCost" required></td></tr>
+      <tr><td>GST %</td><td><input type="number" id="gstPercent" value="8.9" required></td></tr>
+      <tr><td>GST Amount</td><td><input type="text" id="gstAmount" readonly></td></tr>
+      <tr><td>Total Project Cost</td><td><input type="text" id="totalCost" readonly></td></tr>
+      <tr><td>60% Advance</td><td><input type="text" id="advance" readonly></td></tr>
+      <tr><td>30% Proforma</td><td><input type="text" id="proforma" readonly></td></tr>
+      <tr><td>5% Commissioning</td><td><input type="text" id="commissioning" readonly></td></tr>
+      <tr><td>5% Meter Installation</td><td><input type="text" id="meter" readonly></td></tr>
     </table>
     <button type="submit">Generate Quotation PDF</button>
   </form>
@@ -69,18 +42,22 @@
     const meter = document.getElementById('meter');
     const downloadLink = document.getElementById('downloadLink');
 
+    function formatCurrency(value) {
+      return `₹${Math.round(value)}`;
+    }
+
     function calculate() {
       const cost = parseFloat(systemCost.value) || 0;
       const gst = (cost * (parseFloat(gstPercent.value) || 0)) / 100;
       const total = cost + gst;
 
-      gstAmount.value = gst.toFixed(2);
-      totalCost.value = total.toFixed(2);
+      gstAmount.value = formatCurrency(gst);
+      totalCost.value = formatCurrency(total);
 
-      advance.value = (total * 0.60).toFixed(2);
-      proforma.value = (total * 0.30).toFixed(2);
-      commissioning.value = (total * 0.05).toFixed(2);
-      meter.value = (total * 0.05).toFixed(2);
+      advance.value = formatCurrency(total * 0.60);
+      proforma.value = formatCurrency(total * 0.30);
+      commissioning.value = formatCurrency(total * 0.05);
+      meter.value = formatCurrency(total * 0.05);
     }
 
     systemCost.addEventListener('input', calculate);
