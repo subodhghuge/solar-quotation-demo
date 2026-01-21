@@ -36,21 +36,32 @@ app.post('/generate-pdf', (req, res) => {
   doc.fontSize(10).text("Commercial Quotation", { align: 'right' });
   doc.moveDown(2);
 
-  // --- BODY ---
-  doc.fontSize(16).text("Solar Quotation", { align: 'center' });
+  // --- TABLE TITLE ---
+  doc.fontSize(16).text("Solar Quotation (10 KW)", { align: 'center' });
   doc.moveDown();
-  doc.fontSize(12).text(`System Cost: ₹${systemCost}`);
-  doc.text(`GST (${gstPercent}%): ₹${gstAmount}`);
-  doc.text(`Total Project Cost: ₹${totalCost}`);
-  doc.moveDown();
-  doc.text("Payment Terms:");
-  doc.text(`60% Advance: ₹${advance}`);
-  doc.text(`30% Proforma: ₹${proforma}`);
-  doc.text(`5% Commissioning: ₹${commissioning}`);
-  doc.text(`5% Meter Installation: ₹${meter}`);
+
+  // --- TABLE ---
+  const tableTop = 200;
+  const itemSpacing = 30;
+  const leftX = 50;
+  const rightX = 350;
+
+  function drawRow(y, label, value) {
+    doc.fontSize(12).fillColor('black').text(label, leftX, y);
+    doc.text(value, rightX, y);
+    doc.moveTo(leftX, y - 5).lineTo(550, y - 5).strokeColor('#cccccc').stroke();
+  }
+
+  drawRow(tableTop, "System Cost (₹)", systemCost);
+  drawRow(tableTop + itemSpacing, `GST (${gstPercent}%)`, gstAmount);
+  drawRow(tableTop + itemSpacing * 2, "Total Project Cost (₹)", totalCost);
+  drawRow(tableTop + itemSpacing * 3, "60% Advance", advance);
+  drawRow(tableTop + itemSpacing * 4, "30% Proforma", proforma);
+  drawRow(tableTop + itemSpacing * 5, "5% Commissioning", commissioning);
+  drawRow(tableTop + itemSpacing * 6, "5% Meter Installation", meter);
 
   // --- FOOTER ---
-  doc.moveDown(4);
+  doc.moveDown(6);
   doc.fontSize(10).fillColor('gray')
      .text("Mauli Solar Power Energy | Ratanlal Plot Durga Chowk Akola", { align: 'center' });
   doc.text("Contact: info@maulisolar.com | +91-XXXXXXXXXX", { align: 'center' });
